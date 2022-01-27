@@ -41,12 +41,6 @@ jobs:
 
       - name: Unpack artifact
         run: unzip download.zip -d docs-new/
-      
-      - name: Check for broken links
-        continue-on-error: true
-        run: |
-          python3 -m pip install linkchecker
-          linkchecker --check-extern docs-new/index.html
 
       - name: Setup Context
         run: |
@@ -67,6 +61,7 @@ jobs:
           echo "NAME=$NAME" >> $GITHUB_ENV
           echo "HASH=$HASH" >> $GITHUB_ENV
           echo "ISTAG=$ISTAG" >> $GITHUB_ENV
+          # ${{ toJSON(github) }}
 
       - name: Update docs
         continue-on-error: true
