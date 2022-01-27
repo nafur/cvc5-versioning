@@ -8,6 +8,7 @@ intended to be an open and extensible SMT engine.
 
 This space provides all documentation related to using cvc5.
 
+Foo bar.
 
 Table of Contents
 ^^^^^^^^^^^^^^^^^
