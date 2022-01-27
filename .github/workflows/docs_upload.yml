@@ -44,7 +44,6 @@ jobs:
 
       - name: Setup Context
         run: |
-          # ${{ toJSON(github) }}
           HASH=${{ github.event.workflow_run.head_commit.id }}
           ISTAG=${{ github.ref_name != github.event.workflow_run.head_branch }}
           if [ "$ISTAG" = true ] ; then
@@ -62,6 +61,7 @@ jobs:
           echo "NAME=$NAME" >> $GITHUB_ENV
           echo "HASH=$HASH" >> $GITHUB_ENV
           echo "ISTAG=$ISTAG" >> $GITHUB_ENV
+          # ${{ toJSON(github) }}
 
       - name: Update docs
         continue-on-error: true
