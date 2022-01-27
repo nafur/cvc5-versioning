@@ -44,7 +44,7 @@ jobs:
 
       - name: Setup Context
         run: |
-          # ${{ github }}
+          # ${{ toJSON(github) }}
           HASH=${{ github.event.workflow_run.head_commit.id }}
           ISTAG=${{ github.ref_name != github.event.workflow_run.head_branch }}
           if [ "$ISTAG" = true ] ; then
