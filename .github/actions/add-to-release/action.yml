@@ -71,11 +71,14 @@ runs:
         import os
         from github import Github
 
+        refname = os.getenv('GITHUB_REF_NAME')
         gh = Github(os.getenv('GITHUB_TOKEN'))
         repo = gh.get_repo(os.getenv('GITHUB_REPOSITORY'))
         try:
-          rel = repo.get_release(os.getenv('GITHUB_REF_NAME'))
+          rel = repo.get_release(refname)
         except:
-          rel = repo.create_git_release(os.getenv('GITHUB_REF_NAME'), os.getenv('GITHUB_REF_NAME'))
+          ref = repo.get_git_ref(refname)
+          commit = repo.get_git_commit(ref.object.sha)
+          rel = repo.create_git_release(refname, refname, commit.message)
         rel.upload_asset(os.getenv('BINARY'))
 
