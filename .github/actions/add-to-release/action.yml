@@ -43,7 +43,11 @@ runs:
           print('tag `latest` does not exist.')
           exit
 
-        rel = repo.get_release('latest')
+        try:
+          rel = repo.get_release('latest')
+        except:
+          rel = repo.create_git_release('latest')
+        
 
         for asset in rel.get_assets():
           age = datetime.datetime.now() - asset.created_at
@@ -69,6 +73,9 @@ runs:
 
         gh = Github(os.getenv('GITHUB_TOKEN'))
         repo = gh.get_repo(os.getenv('GITHUB_REPOSITORY'))
-        rel = repo.get_release(os.getenv('GITHUB_REF_NAME'))
+        try:
+          rel = repo.get_release(os.getenv('GITHUB_REF_NAME'))
+        except:
+          rel = repo.create_git_release(os.getenv('GITHUB_REF_NAME'))
         rel.upload_asset(os.getenv('BINARY'))
 
