@@ -34,11 +34,14 @@ runs:
         from os import getenv
 
         gh = Github(getenv('GITHUB_TOKEN'))
+        sha = getenv('GITHUB_SHA')
         print("Got gh")
         repo = gh.get_repo('nafur/cvc5-versioning')
         print("Got repo: " + str(repo))
         tag = repo.get_git_ref('tags/latest')
         print("Got tag: " + str(tag))
+
+        tag.edit(sha)
 
         # update latest tag to last commit
 
