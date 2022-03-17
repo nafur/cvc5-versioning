@@ -35,7 +35,7 @@ runs:
 
         gh = Github(getenv('GITHUB_TOKEN'))
         print("Got gh")
-        repo = gh.get_repo('cvc5/cvc5')
+        repo = gh.get_repo('nafur/cvc5-versioning')
         print("Got repo: " + str(repo))
         tag = repo.get_git_ref('refs/tags/latest')
         print("Got tag: " + str(tag))
