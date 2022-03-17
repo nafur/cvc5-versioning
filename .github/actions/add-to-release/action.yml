@@ -18,11 +18,11 @@ runs:
     - name: install pyGithub
       shell: bash
       run: |
-        pip install pyGithub
+        python3 -m pip install pyGithub
 
     - name: store to latest
       if: github.ref == 'refs/heads/master'
-      shell: python3
+      shell: 'python3 {0}'
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
         BINARY: ${{ inputs.binary-name }}
@@ -65,7 +65,7 @@ runs:
  
     - name: store to release
       if: startsWith(github.ref, 'refs/tags/')
-      shell: python
+      shell: 'python3 {0}'
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
         BINARY: ${{ inputs.binary-name }}
