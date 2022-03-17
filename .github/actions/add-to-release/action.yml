@@ -31,19 +31,26 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github-token }}
         BINARY: ${{ inputs.release-name }}
       run: |
+        import datetime
+        import os
         from github import Github
-        from os import getenv
 
-        gh = Github(getenv('GITHUB_TOKEN'))
+        curtime = datetime.datetime.now().strftime('%m%d-%H%M')
+        sha = os.getenv('GITHUB_SHA')
+
+        gh = Github(os.getenv('GITHUB_TOKEN'))
         print("Got gh")
         repo = gh.get_repo('nafur/cvc5-versioning')
         print("Got repo: " + str(repo))
         
         # update "latest" to current commit
-        repo.get_git_ref('tags/latest').edit(getenv('GITHUB_SHA'))
+        repo.get_git_ref('tags/latest').edit(sha)
 
+        binary = os.getenv('BINARY')
+        name,ext = os.path.splitext(binary)
+        filename = '{}-{}-{}{}'.format(name, curtime, sha[:7], ext)
         rel = repo.get_release('latest')
-        rel.upload_asset(getenv('BINARY'))
+        rel.upload_asset(binary)
 
         # remove all but the last 
 
