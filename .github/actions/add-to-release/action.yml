@@ -64,6 +64,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github-token }}
         BINARY: ${{ inputs.release-binary-name }}
       run: |
+        import os
         from github import Github
 
         gh = Github(os.getenv('GITHUB_TOKEN'))
