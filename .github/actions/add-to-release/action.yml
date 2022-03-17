@@ -1,19 +1,19 @@
-name: Add binary to release
-description: Add cvc5 binary to the current release
+name: Store binary
+description: Store cvc5 binary to the latest tag or the current release
 inputs:
   binary:
     description: file name of binary
-  release-binary-name:
-    description: name of binary in release
+  binary-name:
+    description: target name of binary
   github-token:
     description: token to upload binary
 runs:
   using: composite
   steps:
-    - name: Rename binaries for release
+    - name: Rename binary
       shell: bash
       run: |
-        cp ${{ inputs.binary }} ${{ inputs.release-binary-name }}
+        cp ${{ inputs.binary }} ${{ inputs.binary-name }}
 
     - name: install pyGithub
       shell: bash
@@ -22,10 +22,10 @@ runs:
 
     - name: store to latest
       if: github.ref == 'refs/heads/master'
-      shell: python
+      shell: python3
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
-        BINARY: ${{ inputs.release-binary-name }}
+        BINARY: ${{ inputs.binary-name }}
       run: |
         import datetime
         import os
@@ -47,15 +47,16 @@ runs:
           rel = repo.get_release('latest')
         except:
           print('New `latest` release')
-          commit = repo.get_git_commit(sha)
-          rel = repo.create_git_release('latest', 'latest', commit.message)
+          rel = repo.create_git_release('latest', 'latest', 'Latest builds')
 
+        # prune olds commits
         for asset in rel.get_assets():
           age = datetime.datetime.now() - asset.created_at
           if age.days > 3:
             print('Remove outdated asset: {}'.format(asset))
             asset.delete_asset()
 
+        # upload as asset with proper name
         binary = os.getenv('BINARY')
         name,ext = os.path.splitext(binary)
         curtime = datetime.datetime.now().strftime('%m%d-%H%M')
@@ -67,7 +68,7 @@ runs:
       shell: python
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
-        BINARY: ${{ inputs.release-binary-name }}
+        BINARY: ${{ inputs.binary-name }}
       run: |
         import os
         from github import Github
