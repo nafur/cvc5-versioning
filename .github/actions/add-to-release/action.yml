@@ -45,11 +45,20 @@ runs:
         
         # update "latest" to current commit
         repo.get_git_ref('tags/latest').edit(sha)
+        print("Moved tag")
+
+        rel = repo.get_release('latest')
+        print("Got release: " + str(rel))
+        for asset in rel.get_assets():
+          print("Got asset: " + str(asset))
+          age = datetime.datetime.now() - asset.created_at
+          print('{}: {}'.format(asset, age))
+          if age.days > 7:
+            asset.delete_asset()
 
         binary = os.getenv('BINARY')
         name,ext = os.path.splitext(binary)
         filename = '{}-{}-{}{}'.format(name, curtime, sha[:7], ext)
-        rel = repo.get_release('latest')
         rel.upload_asset(binary)
 
         # remove all but the last 
