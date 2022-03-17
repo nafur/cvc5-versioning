@@ -47,8 +47,7 @@ runs:
           rel = repo.get_release('latest')
         except:
           print('New `latest` release')
-          ref = repo.get_git_ref('tags/latest')
-          commit = repo.get_git_commit(ref.object.sha)
+          commit = repo.get_git_commit(sha)
           rel = repo.create_git_release('latest', 'latest', commit.message)
 
         for asset in rel.get_assets():
