@@ -22,6 +22,7 @@ runs:
         pip install pyGithub
 
     - name: store to latest
+      if: github.ref == 'refs/heads/master'
       shell: python
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
@@ -41,13 +42,13 @@ runs:
           repo.get_git_ref('tags/latest').edit(sha)
         except:
           print('tag `latest` does not exist.')
-          return
+          exit
 
         rel = repo.get_release('latest')
 
         for asset in rel.get_assets():
           age = datetime.datetime.now() - asset.created_at
-          if age.days > 7:
+          if age.days > 3:
             print('Remove outdated asset: {}'.format(asset))
             asset.delete_asset()
 
