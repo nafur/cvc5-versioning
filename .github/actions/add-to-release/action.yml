@@ -46,8 +46,10 @@ runs:
         try:
           rel = repo.get_release('latest')
         except:
-          rel = repo.create_git_release('latest', 'latest')
-        
+          print('New `latest` release')
+          ref = repo.get_git_ref('tags/latest')
+          commit = repo.get_git_commit(ref.object.sha)
+          rel = repo.create_git_release('latest', 'latest', commit.message)
 
         for asset in rel.get_assets():
           age = datetime.datetime.now() - asset.created_at
