@@ -61,7 +61,7 @@ jobs:
       uses: ./.github/actions/add-to-release
       with:
         binary: ${{ steps.configure-and-build.outputs.static-build-dir }}/bin/cvc5${{ matrix.binary-ext }}
-        release-name: ${{ matrix.store-to-release-name }}
+        release-binary-name: ${{ matrix.store-to-release-name }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Add binary to latest and release
@@ -69,7 +69,7 @@ jobs:
       uses: ./.github/actions/add-to-release
       with:
         binary: ${{ steps.configure-and-build.outputs.static-build-dir }}/bin/cvc5${{ matrix.binary-ext }}
-        release-name: ${{ matrix.release-binary-name }}
+        release-binary-name: ${{ matrix.release-binary-name }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
   update-pr:

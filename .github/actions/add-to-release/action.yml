@@ -36,8 +36,12 @@ runs:
         gh = Github(os.getenv('GITHUB_TOKEN'))
         repo = gh.get_repo(os.getenv('GITHUB_REPOSITORY'))
         
-        # update "latest" to current commit
-        repo.get_git_ref('tags/latest').edit(sha)
+        try:
+          # update "latest" to current commit
+          repo.get_git_ref('tags/latest').edit(sha)
+        except:
+          print('tag `latest` does not exist.')
+          return
 
         rel = repo.get_release('latest')
 
