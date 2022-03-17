@@ -48,3 +48,5 @@ runs:
         # remove all but the last 
 
         print(tag)
+        print(sha)
+        
