@@ -15,6 +15,7 @@ jobs:
             build-documentation: true
             check-examples: true
             store-to-release-name: cvc5-Linux
+            release-binary-name: cvc5-Linux
             exclude_regress: 3-4
             run_regression_args: --tester base --tester model --tester synth --tester abduct --tester dump
 
@@ -63,14 +64,13 @@ jobs:
         release-name: ${{ matrix.store-to-release-name }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Add binary to latest
-      if: matrix.store-to-release-name
+    - name: Add binary to latest and release
+      if: matrix.release-binary-name
       uses: ./.github/actions/add-to-release
       with:
         binary: ${{ steps.configure-and-build.outputs.static-build-dir }}/bin/cvc5${{ matrix.binary-ext }}
-        release-name: ${{ matrix.store-to-release-name }}
+        release-name: ${{ matrix.release-binary-name }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        store-to-latest: true
 
   update-pr:
     runs-on: ubuntu-latest

@@ -3,20 +3,17 @@ description: Add cvc5 binary to the current release
 inputs:
   binary:
     description: file name of binary
-  release-name:
+  release-binary-name:
     description: name of binary in release
   github-token:
     description: token to upload binary
-  store-to-latest:
-    description: whether to store binary to latest tag
-    type: boolean
 runs:
   using: composite
   steps:
     - name: Rename binaries for release
       shell: bash
       run: |
-        cp ${{ inputs.binary }} ${{ inputs.release-name }}
+        cp ${{ inputs.binary }} ${{ inputs.release-binary-name }}
 
     - name: install pyGithub
       if: ${{ inputs.store-to-latest }}
@@ -25,41 +22,48 @@ runs:
         pip install pyGithub
 
     - name: store to latest
-      if: inputs.store-to-latest == 'true'
       shell: python
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
-        BINARY: ${{ inputs.release-name }}
+        BINARY: ${{ inputs.release-binary-name }}
       run: |
         import datetime
         import os
         from github import Github
 
-        curtime = datetime.datetime.now().strftime('%m%d-%H%M')
         sha = os.getenv('GITHUB_SHA')
 
         gh = Github(os.getenv('GITHUB_TOKEN'))
-        print("Got gh")
-        repo = gh.get_repo('nafur/cvc5-versioning')
-        print("Got repo: " + str(repo))
+        repo = gh.get_repo(os.getenv('GITHUB_REPOSITORY'))
         
         # update "latest" to current commit
         repo.get_git_ref('tags/latest').edit(sha)
-        print("Moved tag")
 
         rel = repo.get_release('latest')
-        print("Got release: " + str(rel))
+
         for asset in rel.get_assets():
-          print("Got asset: " + str(asset))
           age = datetime.datetime.now() - asset.created_at
-          print('{}: {}'.format(asset, age))
           if age.days > 7:
+            print('Remove outdated asset: {}'.format(asset))
             asset.delete_asset()
 
         binary = os.getenv('BINARY')
         name,ext = os.path.splitext(binary)
+        curtime = datetime.datetime.now().strftime('%m%d-%H%M')
         filename = '{}-{}-{}{}'.format(name, curtime, sha[:7], ext)
         rel.upload_asset(binary, name=filename)
+ 
+    - name: store to release
+      if: startsWith(github.ref, 'refs/tags/')
+      shell: python
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        BINARY: ${{ inputs.release-binary-name }}
+      run: |
+        from github import Github
 
-        # remove all but the last 
+        gh = Github(os.getenv('GITHUB_TOKEN'))
+        repo = gh.get_repo(os.getenv('GITHUB_REPOSITORY'))
+        rel = repo.get_release(os.getenv('GITHUB_REF_NAME'))
+        rel.upload_asset(os.getenv('BINARY'))
 
