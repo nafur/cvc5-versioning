@@ -37,7 +37,7 @@ runs:
         print("Got gh")
         repo = gh.get_repo('cvc5/cvc5')
         print("Got repo: " + str(repo))
-        tag = repo.get_git_ref('tags/latest')
+        tag = repo.get_git_ref('refs/tags/latest')
         print("Got tag: " + str(tag))
 
         # update latest tag to last commit
