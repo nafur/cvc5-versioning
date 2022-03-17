@@ -46,7 +46,7 @@ runs:
         try:
           rel = repo.get_release('latest')
         except:
-          rel = repo.create_git_release('latest')
+          rel = repo.create_git_release('latest', 'latest')
         
 
         for asset in rel.get_assets():
@@ -76,6 +76,6 @@ runs:
         try:
           rel = repo.get_release(os.getenv('GITHUB_REF_NAME'))
         except:
-          rel = repo.create_git_release(os.getenv('GITHUB_REF_NAME'))
+          rel = repo.create_git_release(os.getenv('GITHUB_REF_NAME'), os.getenv('GITHUB_REF_NAME'))
         rel.upload_asset(os.getenv('BINARY'))
 
