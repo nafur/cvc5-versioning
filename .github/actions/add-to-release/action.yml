@@ -59,7 +59,7 @@ runs:
         binary = os.getenv('BINARY')
         name,ext = os.path.splitext(binary)
         filename = '{}-{}-{}{}'.format(name, curtime, sha[:7], ext)
-        rel.upload_asset(binary)
+        rel.upload_asset(binary, name=filename)
 
         # remove all but the last 
 
