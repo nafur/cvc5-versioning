@@ -101,7 +101,7 @@ jobs:
 
     - name: Add binary to latest and release
       if: matrix.binary-name
-      uses: ./.github/actions/add-to-release
+      uses: ./.github/actions/store-binary
       with:
         binary: ${{ steps.configure-and-build.outputs.static-build-dir }}/bin/cvc5${{ matrix.binary-ext }}
         binary-name: ${{ matrix.binary-name }}
