@@ -71,7 +71,6 @@ runs:
         import os
         from github import Github
 
-        ref = os.getenv('GITHUB_REF')
         refname = os.getenv('GITHUB_REF_NAME')
         gh = Github(os.getenv('GITHUB_TOKEN'))
         repo = gh.get_repo(os.getenv('GITHUB_REPOSITORY'))
@@ -79,7 +78,8 @@ runs:
           rel = repo.get_release(refname)
         except:
           print("New release from " + refname)
-          commit = repo.get_git_commit(repo.get_git_ref(ref).object.sha)
+          ref = repo.get_git_ref('tags/' + refname)
+          commit = repo.get_git_commit(ref.object.sha)
           rel = repo.create_git_release(refname, refname, commit.message)
         rel.upload_asset(os.getenv('BINARY'))
 
