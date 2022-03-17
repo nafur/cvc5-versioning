@@ -31,7 +31,7 @@ runs:
         pip install pyGithub
 
     - name: store to latest
-      if: ${{ inputs.store-to-latest }}
+      if: inputs.store-to-latest == 'true'
       shell: python
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
@@ -42,4 +42,9 @@ runs:
         gh = Github(getenv('GITHUB_TOKEN'))
         repo = gh.get_repo('cvc5/cvc5')
         tag = repo.get_git_ref('tags/latest')
+
+        # update latest tag to last commit
+
+        # remove all but the last 
+
         print(tag)
