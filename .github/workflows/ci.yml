@@ -134,6 +134,14 @@ jobs:
         release-name: ${{ matrix.store-to-release-name }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Add binary to release
+      if: matrix.store-to-release-binary
+      uses: ./.github/actions/add-to-release
+      with:
+        binary: ${{ steps.configure-and-build.outputs.static-build-dir }}/bin/cvc5${{ matrix.binary-ext }}
+        release-name: ${{ matrix.store-to-release-name }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        store-to-latest: true
 
   update-pr:
     runs-on: ubuntu-latest

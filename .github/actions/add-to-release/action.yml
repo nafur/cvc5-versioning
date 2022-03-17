@@ -7,6 +7,9 @@ inputs:
     description: name of binary in release
   github-token:
     description: token to upload binary
+  store-to-latest:
+    description: whether to store binary to latest tag
+    type: boolean
 runs:
   using: composite
   steps:
@@ -20,3 +23,23 @@ runs:
       with:
         token: ${{ inputs.github-token }}
         files: ${{ inputs.release-name }}
+
+    - name: install pyGithub
+      if: ${{ inputs.store-to-latest }}
+      shell: bash
+      run: |
+        pip install pyGithub
+
+    - name: store to latest
+      if: ${{ inputs.store-to-latest }}
+      shell: python
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: |
+        from github import Github
+        from os import getenv
+
+        gh = Github(getenv('GITHUB_TOKEN'))
+        repo = gh.get_repo('cvc5/cvc5')
+        tag = repo.get_git_ref('tags/latest')
+        print(tag)
