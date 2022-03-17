@@ -34,8 +34,11 @@ runs:
         from os import getenv
 
         gh = Github(getenv('GITHUB_TOKEN'))
+        print("Got gh")
         repo = gh.get_repo('cvc5/cvc5')
+        print("Got repo: " + str(repo))
         tag = repo.get_git_ref('tags/latest')
+        print("Got tag: " + str(tag))
 
         # update latest tag to last commit
 
