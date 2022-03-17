@@ -18,12 +18,6 @@ runs:
       run: |
         cp ${{ inputs.binary }} ${{ inputs.release-name }}
 
-    - name: Add binaries to release
-      uses: softprops/action-gh-release@v1
-      with:
-        token: ${{ inputs.github-token }}
-        files: ${{ inputs.release-name }}
-
     - name: install pyGithub
       if: ${{ inputs.store-to-latest }}
       shell: bash
