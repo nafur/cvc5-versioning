@@ -16,7 +16,6 @@ runs:
         cp ${{ inputs.binary }} ${{ inputs.release-binary-name }}
 
     - name: install pyGithub
-      if: ${{ inputs.store-to-latest }}
       shell: bash
       run: |
         pip install pyGithub
