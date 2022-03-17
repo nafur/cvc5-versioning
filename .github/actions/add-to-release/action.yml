@@ -29,24 +29,21 @@ runs:
       shell: python
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
+        BINARY: ${{ inputs.release-name }}
       run: |
         from github import Github
         from os import getenv
 
         gh = Github(getenv('GITHUB_TOKEN'))
-        sha = getenv('GITHUB_SHA')
         print("Got gh")
         repo = gh.get_repo('nafur/cvc5-versioning')
         print("Got repo: " + str(repo))
-        tag = repo.get_git_ref('tags/latest')
-        print("Got tag: " + str(tag))
+        
+        # update "latest" to current commit
+        repo.get_git_ref('tags/latest').edit(getenv('GITHUB_SHA'))
 
-        tag.edit(sha)
-
-        # update latest tag to last commit
+        rel = repo.get_release('latest')
+        rel.upload_asset(getenv('BINARY'))
 
         # remove all but the last 
 
-        print(tag)
-        print(sha)
-        
