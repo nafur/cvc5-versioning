@@ -50,16 +50,21 @@ runs:
           rel = repo.create_git_release('latest', 'latest', 'Latest builds')
 
         # prune olds commits
-        for asset in rel.get_assets():
+        assets = list(rel.get_assets())
+        assets.sort(key=lambda x: x.created_at, reverse=True)
+
+        for cnt,asset in enumerate(assets):
+          if cnt >= 30:
+            asset.delete_asset()
+            continue
           age = datetime.datetime.now() - asset.created_at
           if age.days > 3:
-            print('Remove outdated asset: {}'.format(asset))
             asset.delete_asset()
 
         # upload as asset with proper name
         binary = os.getenv('BINARY')
         name,ext = os.path.splitext(binary)
-        curtime = datetime.datetime.now().strftime('%m%d-%H%M')
+        curtime = repo.get_git_commit(sha).commiter.date.strftime('%m%d-%H%M')
         filename = '{}-{}-{}{}'.format(name, curtime, sha[:7], ext)
         rel.upload_asset(binary, name=filename)
  
