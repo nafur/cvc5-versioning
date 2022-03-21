@@ -68,7 +68,7 @@ runs:
         filename = '{}-{}-{}{}'.format(name, curtime, sha[:7], ext)
         rel.upload_asset(binary, name=filename)
  
-    - name: store to actual release
+    - name: store to release
       if: startsWith(github.ref, 'refs/tags/')
       shell: 'python3 {0}'
       env:
