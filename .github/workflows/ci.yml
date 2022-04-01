@@ -67,4 +67,4 @@ jobs:
       with:
         binary: ${{ steps.configure-and-build.outputs.static-build-dir }}/bin/cvc5${{ matrix.binary-ext }}
         binary-name: ${{ matrix.binary-name }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.ACTION_USER_TOKEN }}
