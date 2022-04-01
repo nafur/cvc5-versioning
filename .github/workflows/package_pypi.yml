@@ -13,7 +13,7 @@ jobs:
         os: [ ubuntu-latest, macos-latest ]
 
     runs-on: ${{ matrix.os }}
-    if: (github.repository == 'cvc5/cvc5') || (github.event_name != 'schedule')
+    if: (github.repository == 'nafur/cvc5-versioning') || (github.event_name != 'schedule')
 
     steps:
     - name: debug output
