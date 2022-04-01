@@ -96,7 +96,6 @@ runs:
           print("New release from " + refname)
           ref = repo.get_git_ref('tags/' + refname)
           commit = repo.get_git_commit(ref.object.sha)
-          rel = repo.create_git_release(refname, refname, commit.message, draft=True)
-          rel.update_release(refname, commit.message, draft=False)
+          rel = repo.create_git_release(refname, refname, commit.message)
         rel.upload_asset(os.getenv('BINARY'))
 
