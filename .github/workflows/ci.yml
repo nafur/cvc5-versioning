@@ -68,18 +68,3 @@ jobs:
         binary: ${{ steps.configure-and-build.outputs.static-build-dir }}/bin/cvc5${{ matrix.binary-ext }}
         binary-name: ${{ matrix.binary-name }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  update-pr:
-    runs-on: ubuntu-latest
-    if: github.repository == 'nafur/cvc5-versioning' && github.event_name == 'push' && github.ref == 'refs/heads/main'
-    concurrency:
-      group: update-pr
-    steps:
-      - name: Automatically update PR
-        uses: adRise/update-pr-branch@v0.6.0
-        with:
-          token: ${{ secrets.ACTION_USER_TOKEN }}
-          base: 'main'
-          sort: 'created'
-          direction: 'asc'
-          required_approval_count: 1
