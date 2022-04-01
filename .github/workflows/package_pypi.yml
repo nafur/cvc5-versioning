@@ -1,6 +1,6 @@
 on:
   release:
-    types: [created, published]
+    types: [published, created, edited, prereleased, released]
   schedule:
     - cron: '0 1 * * *'
 
@@ -16,6 +16,10 @@ jobs:
     if: (github.repository == 'cvc5/cvc5') || (github.event_name != 'schedule')
 
     steps:
+    - name: debug output
+      shell: bash
+      run: |
+        echo ${{ toJSON(github) }}
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
